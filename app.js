@@ -35,8 +35,12 @@ app.get("/api/lokasi", async (req, res) => {
         provinsi = item.text;
       }
 
-      if (item.id.startsWith("district")) {
-        kecamatan = item.text;
+       if (
+        item.id.startsWith("district") ||
+        item.id.startsWith("municipal_district") ||
+        item.id.startsWith("joint_submunicipality")
+      ) {
+        if (!kecamatan) kecamatan = item.text;
       }
     });
 
