@@ -20,10 +20,34 @@ app.get("/api/lokasi", async (req, res) => {
     const data = response.data;
     const lokasi = data.features[0].matching_text;
     const koordinat = data.features[0].geometry.coordinates;
+    const context = data.features[0].context;
+
+    let negara = "";
+    let provinsi = "";
+    let kecamatan = "";
+
+    context.forEach(item => {
+      if (item.id.startsWith("country")) {
+        negara = item.text;
+      }
+
+      if (item.id.startsWith("region")) {
+        provinsi = item.text;
+      }
+
+      if (item.id.startsWith("district")) {
+        kecamatan = item.text;
+      }
+    });
 
     res.json({
         kota: lokasi,
         koordinat: koordinat,
+        negara: negara,
+        provinsi: provinsi,
+        kecamatan: kecamatan,
+        longitude: koordinat[0],
+        latitude: koordinat[1],
     });
   } catch (error) {
     console.error(error.message);
